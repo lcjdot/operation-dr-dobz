@@ -1,5 +1,5 @@
 To Deploy to AWS, run the following command and pass the S3 bucket as the argument:
 
-./updateCloudFormation.sh <s3-bucket-name-here>
+./uploadToCloudFormation.sh <bucket-name-here>
 
-Also, you will need to update the s3 bucket name in ./sam/template.yaml
+For now, this is the bucket to both save your lambda and store the logs.
