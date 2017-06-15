@@ -10,4 +10,5 @@ aws cloudformation package \
 aws cloudformation deploy \
     --template-file ./sam/packaged-template.yaml \
     --stack-name Sonic-DOM-Passthrough \
-    --capabilities CAPABILITY_IAM
+    --capabilities CAPABILITY_IAM \
+    --parameter-overrides S3Bucket=$BUCKET

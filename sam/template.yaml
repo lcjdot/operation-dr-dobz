@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Sonic DOM Project - Post Traces and Save to S3
+Parameters:
+  S3Bucket:
+    Description: The S3 bucket to store Traces in.
+    Type: String
 Resources:
   DomApi:
     Type: AWS::Serverless::Api
@@ -37,7 +41,7 @@ Resources:
       Policies: AmazonS3FullAccess
       Environment:
         Variables:
-          S3_BUCKET: <BUCKET-NAME-HERE>
+          S3_BUCKET: Ref S3Bucket
       Events:
         PutResource:
           Type: Api
