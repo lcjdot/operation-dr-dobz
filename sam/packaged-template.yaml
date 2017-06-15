@@ -1,14 +1,43 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Sonic DOM Project - Post Traces and Save to S3
 Resources:
+  DomApi:
+    Properties:
+      DefinitionBody:
+        info:
+          title:
+            Ref: AWS::StackName
+        paths:
+          /:
+            x-amazon-apigateway-any-method:
+              responses:
+                '200':
+                  description: Describe the 200 response in more detail
+                '500':
+                  description: Describe the 500 response in more detail
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                responses:
+                  '200':
+                    statusCode: 200
+                  '500':
+                    statusCode: 500
+                type: aws
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutFunction.Arn}/invocations
+        swagger: '2.0'
+      StageName: prod
+    Type: AWS::Serverless::Api
   PutFunction:
     Properties:
-      CodeUri: s3://sonic-s3-trace-bucket/6151a75184398d1e939f2954ef699e6e
+      CodeUri: s3://sonic-s3-trace-bucket/f3af7445a96b231eb9da85aa1ccd612a
       Events:
         PutResource:
           Properties:
             Method: any
             Path: /
+            RestApiId:
+              Ref: DomApi
           Type: Api
       Handler: index.put
       Runtime: nodejs4.3

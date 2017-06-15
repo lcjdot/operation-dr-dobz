@@ -2,6 +2,35 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Sonic DOM Project - Post Traces and Save to S3
 Resources:
+  DomApi:
+    Type: AWS::Serverless::Api
+    Properties:
+        StageName: prod
+        DefinitionBody:
+            swagger: 2.0
+            info:
+              title:
+                Ref: AWS::StackName
+            paths:
+              "/":
+                x-amazon-apigateway-any-method:
+                  x-amazon-apigateway-integration:
+                    httpMethod: POST
+                    type: aws
+                    uri:
+                      Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutFunction.Arn}/invocations
+                    responses:
+                      "200":
+                        statusCode: 200
+                      "500":
+                        statusCode: 500
+                  responses:
+                    "200":
+                      description:  Describe the 200 response in more detail
+                    "500":
+                      description:  Describe the 500 response in more detail
+            swagger: '2.0'
+            
   PutFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -15,23 +44,3 @@ Resources:
             Path: /
             Method: any
             RestApiId: !Ref DomApi
-  DomApi:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: test
-      DefinitionBody: 
-        swagger: "2.0"
-        info:
-          version: "1.0.0"
-          title: minimal
-          description: Example of the bare minimum Swagger spec
-        host: localhost:3000 # otherwise, a random port will be used each time
-        paths:
-          /:
-            put:
-              responses:
-                "200":
-                  description:  Describe the 200 response in more detail
-                "500":
-                  description:  Describe the 500 response in more detail
-        
