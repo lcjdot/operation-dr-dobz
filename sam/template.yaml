@@ -20,15 +20,12 @@ Resources:
                     uri:
                       Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PutFunction.Arn}/invocations
                     responses:
-                      "200":
+                      default:
                         statusCode: 200
-                      "500":
-                        statusCode: 500
+                    passthroughBehavior: when_no_match
                   responses:
                     "200":
                       description:  Describe the 200 response in more detail
-                    "500":
-                      description:  Describe the 500 response in more detail
             swagger: '2.0'
             
   PutFunction:
@@ -44,3 +41,13 @@ Resources:
             Path: /
             Method: any
             RestApiId: !Ref DomApi
+            
+  ConfigLambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    DependsOn:
+    - DomApi
+    - PutFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref PutFunction
+      Principal: apigateway.amazonaws.com
