@@ -31,9 +31,13 @@ Resources:
   PutFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: index.put
+      Handler: index.handler
       Runtime: nodejs4.3
       CodeUri: ../lambda
+      Policies: AmazonS3FullAccess
+      Environment:
+        Variables:
+          S3_BUCKET: "sonic-s3-trace-bucket"
       Events:
         PutResource:
           Type: Api

@@ -1,17 +1,5 @@
-Generating a SAM template with the following commands and parameters
+To Deploy to AWS, run the following command and pass the S3 bucket as the argument:
 
-aws cloudformation package \
-    --template-file ./sam/template.yaml \
-    --s3-bucket bucket-name \
-    --output-template-file packaged-template.yaml
-    
-Where:
-    bucket-name: sonic-s3-trace-bucket
-    
-    
-To Deploy:
+./updateCloudFormation.sh <s3-bucket-name-here>
 
-aws cloudformation deploy \
-    --template-file ./sam/packaged-template.yaml \
-    --stack-name Sonic-DCP-Passthrough \
-    --capabilities CAPABILITY_IAM
+Also, you will need to update the s3 bucket name in ./sam/template.yaml

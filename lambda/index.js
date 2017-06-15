@@ -1,14 +1,17 @@
-'use strict';
-const AWS = require('aws-sdk');
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
 
-const createResponse = (statusCode, body) => {
-    return {
-        statusCode: statusCode,
-        body: body
-    }
-};
+const tableName = process.env.S3_BUCKET;
 
-exports.put = (event, context, callback) => {
-    console.log(`PUT ITEM SUCCEEDED WITH doc = ${JSON.stringify(event)}`);
-    callback(null, createResponse(200, {"I got":"Into Lambda"}));
+exports.handler = (event, context, callback) => {
+    console.log(JSON.stringify(event));
+
+    s3.putObject({
+            Bucket: tableName,
+            Key: 'event-log.' + Date.now() + '.log',
+            Body: JSON.stringify(event)
+        },
+        (err) => {
+            callback(err);
+        });
 };
