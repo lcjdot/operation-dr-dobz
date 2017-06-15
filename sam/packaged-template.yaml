@@ -1,57 +1,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Simple CRUD webservice. State is stored in a SimpleTable (DynamoDB) resource.
+Description: Sonic DOM Project - Post Traces and Save to S3
 Resources:
-  DeleteFunction:
-    Properties:
-      CodeUri: s3://sonic-s3-trace-bucket/f92c579c05677c177088dd5f900bdad6
-      Environment:
-        Variables:
-          TABLE_NAME:
-            Ref: Table
-      Events:
-        DeleteResource:
-          Properties:
-            Method: delete
-            Path: /resource/{resourceId}
-          Type: Api
-      Handler: index.delete
-      Policies: AmazonDynamoDBFullAccess
-      Runtime: nodejs4.3
-    Type: AWS::Serverless::Function
-  GetFunction:
-    Properties:
-      CodeUri: s3://sonic-s3-trace-bucket/f92c579c05677c177088dd5f900bdad6
-      Environment:
-        Variables:
-          TABLE_NAME:
-            Ref: Table
-      Events:
-        GetResource:
-          Properties:
-            Method: get
-            Path: /resource/{resourceId}
-          Type: Api
-      Handler: index.get
-      Policies: AmazonDynamoDBReadOnlyAccess
-      Runtime: nodejs4.3
-    Type: AWS::Serverless::Function
   PutFunction:
     Properties:
-      CodeUri: s3://sonic-s3-trace-bucket/f92c579c05677c177088dd5f900bdad6
-      Environment:
-        Variables:
-          TABLE_NAME:
-            Ref: Table
+      CodeUri: s3://sonic-s3-trace-bucket/6151a75184398d1e939f2954ef699e6e
       Events:
         PutResource:
           Properties:
-            Method: put
-            Path: /resource/{resourceId}
+            Method: any
+            Path: /
           Type: Api
       Handler: index.put
-      Policies: AmazonDynamoDBFullAccess
       Runtime: nodejs4.3
     Type: AWS::Serverless::Function
-  Table:
-    Type: AWS::Serverless::SimpleTable
 Transform: AWS::Serverless-2016-10-31

@@ -1,57 +1,37 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Simple CRUD webservice. State is stored in a SimpleTable (DynamoDB) resource.
+Description: Sonic DOM Project - Post Traces and Save to S3
 Resources:
-  GetFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: index.get
-      Runtime: nodejs4.3
-      CodeUri: ./
-      Policies: AmazonDynamoDBReadOnlyAccess
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref Table
-      Events:
-        GetResource:
-          Type: Api
-          Properties:
-            Path: /resource/{resourceId}
-            Method: get
-
   PutFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.put
       Runtime: nodejs4.3
-      CodeUri: ./
-      Policies: AmazonDynamoDBFullAccess
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref Table
+      CodeUri: ../lambda
       Events:
         PutResource:
           Type: Api
           Properties:
-            Path: /resource/{resourceId}
-            Method: put
-
-  DeleteFunction:
-    Type: AWS::Serverless::Function
+            Path: /
+            Method: any
+            RestApiId: !Ref DomApi
+  DomApi:
+    Type: AWS::Serverless::Api
     Properties:
-      Handler: index.delete
-      Runtime: nodejs4.3
-      CodeUri: ./
-      Policies: AmazonDynamoDBFullAccess
-      Environment:
-        Variables:
-          TABLE_NAME: !Ref Table
-      Events:
-        DeleteResource:
-          Type: Api
-          Properties:
-            Path: /resource/{resourceId}
-            Method: delete
-
-  Table:
-    Type: AWS::Serverless::SimpleTable
+      StageName: test
+      DefinitionBody: 
+        swagger: "2.0"
+        info:
+          version: "1.0.0"
+          title: minimal
+          description: Example of the bare minimum Swagger spec
+        host: localhost:3000 # otherwise, a random port will be used each time
+        paths:
+          /:
+            put:
+              responses:
+                "200":
+                  description:  Describe the 200 response in more detail
+                "500":
+                  description:  Describe the 500 response in more detail
+        
