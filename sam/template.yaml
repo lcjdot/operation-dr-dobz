@@ -37,7 +37,7 @@ Resources:
       Policies: AmazonS3FullAccess
       Environment:
         Variables:
-          S3_BUCKET: "sonic-s3-trace-bucket"
+          S3_BUCKET: <BUCKET-NAME-HERE>
       Events:
         PutResource:
           Type: Api
