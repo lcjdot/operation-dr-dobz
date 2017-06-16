@@ -6,6 +6,13 @@ Parameters:
     Description: The S3 bucket to store Traces in.
     Type: String
 Resources:
+  SrcBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: dom-api-lambda
+      Tags:
+        - Name dom-api-lambda
+
   DomApi:
     Type: AWS::Serverless::Api
     Properties:
