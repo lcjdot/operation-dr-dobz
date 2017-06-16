@@ -13,8 +13,7 @@ Resources:
         DefinitionBody:
             swagger: 2.0
             info:
-              title:
-                Ref: AWS::StackName
+              title: !Ref AWS::StackName
             paths:
               "/":
                 x-amazon-apigateway-any-method:
@@ -31,17 +30,17 @@ Resources:
                     "200":
                       description:  Describe the 200 response in more detail
             swagger: '2.0'
-            
+
   PutFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
       Runtime: nodejs4.3
-      CodeUri: ../lambda
+      CodeUri: ./lambda
       Policies: AmazonS3FullAccess
       Environment:
         Variables:
-          S3_BUCKET: Ref S3Bucket
+          S3_BUCKET: !Ref S3Bucket
       Events:
         PutResource:
           Type: Api
@@ -49,9 +48,9 @@ Resources:
             Path: /
             Method: any
             RestApiId: !Ref DomApi
-            
+
   ConfigLambdaPermission:
-    Type: "AWS::Lambda::Permission"
+    Type: AWS::Lambda::Permission
     DependsOn:
     - DomApi
     - PutFunction
