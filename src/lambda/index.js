@@ -1,5 +1,5 @@
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3();
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 
 const tableName = process.env.S3_BUCKET;
 
@@ -13,5 +13,6 @@ exports.handler = (event, context, callback) => {
         },
         (err) => {
             callback(err);
-        });
+        }
+    );
 };
